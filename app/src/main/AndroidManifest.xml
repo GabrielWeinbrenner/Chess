@@ -10,10 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChessApp">
         <activity
-            android:name=".GameFinalFormView"
+            android:name=".Controller.ChessPreviewGameView"
             android:exported="false" />
         <activity
-            android:name=".ChessGame"
+            android:name=".Controller.HomeScreenView"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.GameFinalFormView"
+            android:exported="false" />
+        <activity
+            android:name=".Controller.ChessGame"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

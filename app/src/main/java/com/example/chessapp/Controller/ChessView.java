@@ -1,4 +1,4 @@
-package com.example.chessapp;
+package com.example.chessapp.Controller;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -25,9 +25,11 @@ public class ChessView extends View {
     private SquareView[][] squareViews;
     private Square firstSquare = null;
     private Square secondSquare = null;
+    private boolean isPreview = false;
 
-    public ChessView(Context context, Board board) {
+    public ChessView(Context context, Board board, Boolean isPreview) {
         super(context);
+        this.isPreview = isPreview;
         this.board = board;
         squareViews = new SquareView[COLS][ROWS];
     }
@@ -64,6 +66,7 @@ public class ChessView extends View {
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(isPreview) return false;
         int touchX = (int) event.getX();
         int touchY = (int) event.getY();
         switch(event.getAction() & MotionEvent.ACTION_MASK) {
@@ -78,7 +81,7 @@ public class ChessView extends View {
                                 secondSquare = board.getBoard()[c][r];
                                 boolean validMove = board.isValidMove(firstSquare, secondSquare);
                                 if(validMove) {
-                                    board.movePiece(firstSquare, secondSquare);
+                                    board.movePiece(firstSquare, secondSquare, false);
                                 }
                                 firstSquare = null;
                                 secondSquare = null;

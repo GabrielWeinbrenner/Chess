@@ -1,17 +1,23 @@
 package com.example.chessapp.Model;
 
+import android.os.Parcel;
+
+import androidx.annotation.NonNull;
+
 import com.example.chessapp.ChessGameListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Board {
+public class Board implements Serializable {
     public static final int SIZE = 8;
     public Square[][] board = new Square[SIZE][SIZE];
     private PieceFactory pieceFactory = new PieceFactory();
     private boolean whiteMove = true;
     public static HashMap<String, String> INITIAL_POSITIONS;
     private ArrayList<Move> moves = new ArrayList<>();
+    private int currMoveIndex = -1;
     private ChessGameListener listener;
 
     public Board(ChessGameListener listener) {
@@ -35,6 +41,11 @@ public class Board {
         INITIAL_POSITIONS.put("H8", "rook");
         buildBoard();
     }
+
+    protected Board(Parcel in) {
+        whiteMove = in.readByte() != 0;
+    }
+
     public String getPlayer() {
         return this.whiteMove ? "White" : "Black";
     }
@@ -102,27 +113,31 @@ public class Board {
 //        return board[unmapFile(file)][unmapRank(rank)];
 //    }
 
-    public void movePiece(Square oldSquare, Square newSquare){
+    public void movePiece(Square oldSquare, Square newSquare, boolean isPreview){
         if(newSquare == null || oldSquare == null) return;
         Piece currPiece = oldSquare.getPiece();
         Piece capturedPiece = newSquare.getPiece();
         if(capturedPiece != null){
             pieceFactory.removePiece(capturedPiece);
         }
+        currPiece.setMoved(true);
         this.whiteMove = !(this.whiteMove);
 
         oldSquare.setPiece(null);
         newSquare.setPiece(currPiece);
-        moves.add(new Move(oldSquare, newSquare, capturedPiece));
+        if(!isPreview) {
+            moves.add(new Move(oldSquare, newSquare, capturedPiece));
+        }
         listener.onMovePiece();
 
     }
-    public void movePiece(Move move){
+    public void movePiece(@NonNull Move move){
         Square initialSquare = move.getPrevSquare();
         Square nextSquare = move.getNextSquare();
         Piece capturedPiece = move.getCapturedPiece();
         if(nextSquare == null || initialSquare == null) return;
         Piece currPiece = nextSquare.getPiece();
+        currPiece.setMoved(true);
         initialSquare.setPiece(currPiece);
         nextSquare.setPiece(capturedPiece);
         if(capturedPiece != null) {
@@ -130,6 +145,8 @@ public class Board {
 
         }
         this.whiteMove = !(this.whiteMove);
+        listener.onMovePiece();
+
     }
     public void undoMove() {
         Move lastMove = moves.get(moves.size() -1);
@@ -188,8 +205,48 @@ public class Board {
         }
         int index = (int)(Math.random() * finalPick.size());
         Move move = finalPick.get(index);
-        movePiece(move.getPrevSquare(), move.getNextSquare());
+        movePiece(move.getPrevSquare(), move.getNextSquare(), false);
     }
+    public int getCurrentMoveIndex() {
+        return this.currMoveIndex+1;
+    }
+    public void setMoves(ArrayList<Move> moves) {
+        this.moves = moves;
+    }
+
+    public void previousMove() {
+        currMoveIndex--;
+        Move nextMove = this.moves.get(currMoveIndex);
+        Square currentSquare = getSquare(nextMove.getPrevSquare().toString());
+        Square nextSquare = getSquare(nextMove.getNextSquare().toString());
+
+        movePiece(nextSquare, currentSquare, true);
+    }
+
+    public void nextMove() throws Exception {
+
+        currMoveIndex++;
+        if(currMoveIndex == this.moves.size()){
+            throw new Exception("End of moves");
+        }
+        Move nextMove = this.moves.get(currMoveIndex);
+        Square currentSquare = getSquare(nextMove.getPrevSquare().toString());
+        Square nextSquare = getSquare(nextMove.getNextSquare().toString());
+
+        movePiece(currentSquare, nextSquare, true);
+    }
+
+    public Square getSquare(String position) {
+        for(int i = 0; i < SIZE; i++) {
+            for(int j = 0; j < SIZE; j++) {
+                    if(board[i][j].toString().equals(position)) {
+                        return board[i][j];
+                    }
+            }
+        }
+        return null;
+    }
+
 
 //    public String toString(){
 //        String returnedString = "";
@@ -197,10 +254,6 @@ public class Board {
 //            for(int j = 0; j < SIZE; j++){
 //                returnedString+=board[j][i].toString();
 //            }
-//            returnedString+=String.format("%s\n", RANKS[i]);
-//        }
-//        for(int i = 0; i < SIZE; i++) {
-//            returnedString+=" " + FILES[i] + " ";
 //        }
 //        return returnedString + "\n";
 //    }

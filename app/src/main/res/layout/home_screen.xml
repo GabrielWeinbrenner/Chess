@@ -4,15 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Controller.GameFinalFormView">
+    tools:context=".Controller.HomeScreenView">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Space
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="54dp" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/helper_text"
+                style="@style/Widget.MaterialComponents.TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="CHESS IN ANDROID"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="20dp" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,15 +49,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
-            <EditText
-                android:id="@+id/game_name_input"
-                android:layout_width="wrap_content"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Game Name" />
-
             <Space
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,7 +58,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="258dp"
+            android:layout_height="358dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -52,10 +68,12 @@
                 android:layout_weight="1" />
 
             <ListView
+                android:id="@+id/games_list"
                 android:layout_width="623dp"
-                android:layout_height="match_parent"
+                android:layout_height="354dp"
                 android:layout_weight="1"
-                android:id="@+id/moves_list"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 />
 
             <Space
@@ -79,9 +97,9 @@
             <Button
                 android:id="@+id/start_game_button"
                 android:layout_width="617dp"
-                android:layout_height="wrap_content"
+                android:layout_height="58dp"
                 android:layout_weight="1"
-                android:text="Save"
+                android:text="Start Game"
                 app:backgroundTint="#91D39B" />
 
             <Space

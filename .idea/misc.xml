@@ -7,6 +7,11 @@
         <entry key="app/src/main/res/layout/activity_final_game_form.xml" value="0.19791666666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="app/src/main/res/layout/chess_game.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/chess_game_final_form.xml" value="0.3061797752808989" />
+        <entry key="app/src/main/res/layout/chess_preview_game.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/home_screen.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/move_item.xml" value="0.2109375" />
+        <entry key="app/src/main/res/layout/move_list_item.xml" value="0.2109375" />
       </map>
     </option>
   </component>

@@ -26,7 +26,7 @@ public class Pawn extends Piece {
         }
         if(!this.hasMoved() && currFileIndex == nextFileIndex && Math.abs(nextRankIndex - currRankIndex) <=2){
             if(Math.abs(nextRankIndex- currRankIndex) == 2){
-                Square inbetween = board.getBoard()[currFileIndex][isWhite() ? nextRankIndex-1 : nextRankIndex+1];
+               Square inbetween = board.getBoard()[currFileIndex][isWhite() ? nextRankIndex-1 : nextRankIndex+1];
 
                 Piece inbetweenPiece = null;
                 if(inbetween != null) {
@@ -49,32 +49,11 @@ public class Pawn extends Piece {
                 return bPawnCheck;
             }
         }
-//        else if(nextFileIndex == currFileIndex - 1 || nextFileIndex == currFileIndex + 1){
-//            if(nextPiece == null && (nextRankIndex == currRankIndex - 1 || nextRankIndex == currRankIndex + 1)){
-//                int enpassantFile = nextFileIndex;
-//                int enpassantRank = nextRankIndex;
-//                if(isWhite()){
-//                    enpassantRank++;
-//                } else {
-//                    enpassantRank--;
-//                }
-//                Square enpassantSquare = board.getBoard()[enpassantFile][enpassantRank];
-//                if(enpassantSquare == null){
-//                    return false;
-//                }
-//                Piece curr = enpassantSquare.getPiece();
-//                if(curr != null && curr.getClass().getSimpleName().equals("Pawn")){
-//                    board.getPieceFactory().removePiece(curr);
-//                    enpassantSquare.setPiece(null);
-//                    return true;
-//                }
-//                return false;
-//
-//            }
-//            if(nextPiece != null && nextPiece.isWhite() != isWhite()){
-//                return isWhite() ? nextRankIndex == currRankIndex + 1 : nextRankIndex == currRankIndex - 1;
-//            }
-//        }
+        else if(nextFileIndex == currFileIndex - 1 || nextFileIndex == currFileIndex + 1){
+            if(nextPiece != null && nextPiece.isWhite() != isWhite()){
+                return isWhite() ? nextRankIndex == currRankIndex + 1 : nextRankIndex == currRankIndex - 1;
+            }
+        }
 
         return false;
     }

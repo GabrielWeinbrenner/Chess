@@ -1,6 +1,8 @@
 package com.example.chessapp.Model;
 
-public abstract class Piece {
+import java.io.Serializable;
+
+public abstract class Piece implements Serializable {
     private boolean isKilled = false;
     private boolean isWhite = false;
     private boolean hasMoved = false;

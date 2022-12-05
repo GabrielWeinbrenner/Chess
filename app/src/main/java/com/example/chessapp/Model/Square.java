@@ -1,7 +1,9 @@
 package com.example.chessapp.Model;
 
 
-public class Square {
+import java.io.Serializable;
+
+public class Square implements Serializable {
     private final int col;
     private final int row;
     private Piece currentPiece;
@@ -53,6 +55,6 @@ public class Square {
     public String toString() {
         final String column = getFile(this.col);
         final String row = getRank(this.row);
-        return "<Square " + column + row + ">";
+        return column + "" + row;
     }
 }

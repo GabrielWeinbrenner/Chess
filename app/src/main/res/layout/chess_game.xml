@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/chess_layout"
-    tools:context=".ChessGame"
+    tools:context=".Controller.ChessGame"
     >
 
     <LinearLayout
@@ -70,12 +70,5 @@
             />
 
     </LinearLayout>
-
-<!--    <com.example.chessapp.ChessView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        tools:context=".MainActivity"-->
-<!--        android:id="@+id/chess_view"-->
-<!--        ></com.example.chessapp.ChessView>-->
 
 </LinearLayout>

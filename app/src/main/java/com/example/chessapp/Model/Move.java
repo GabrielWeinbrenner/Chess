@@ -1,6 +1,9 @@
 package com.example.chessapp.Model;
 
-public class Move {
+import java.io.Serializable;
+
+public class Move implements Serializable {
+
     private Square prevSquare;
     private Square nextSquare;
     private Piece capturedPiece;
@@ -20,5 +23,9 @@ public class Move {
 
     public Piece getCapturedPiece() {
         return capturedPiece;
+    }
+
+    public String toString() {
+        return String.format("%s %s", this.prevSquare.toString(), this.nextSquare.toString());
     }
 }

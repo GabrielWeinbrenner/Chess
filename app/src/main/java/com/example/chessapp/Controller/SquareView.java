@@ -1,4 +1,4 @@
-package com.example.chessapp;
+package com.example.chessapp.Controller;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 
 import com.example.chessapp.Model.Square;
+import com.example.chessapp.R;
 
 
 public class SquareView extends View {
