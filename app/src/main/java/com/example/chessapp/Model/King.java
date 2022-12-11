@@ -1,5 +1,7 @@
 package com.example.chessapp.Model;
 
+import java.util.ArrayList;
+
 public class King extends Piece {
     public King(boolean isWhite, String rank, String file) {
         super(isWhite, rank, file);
@@ -18,78 +20,76 @@ public class King extends Piece {
 
     @Override
     public boolean canMove(Board board, Square currentSquare, Square nextSquare) {
-        return false;
+        int currFileIndex = currentSquare.getCol();
+        int currRankIndex = currentSquare.getRow();
+        int nextFileIndex = nextSquare.getCol();
+        int nextRankIndex = nextSquare.getRow();
+
+        PieceFactory p = board.getPieceFactory();
+        ArrayList<Piece> allyPieces = p.getPieces((this.isWhite()) ? "White" : "Black");
+
+        boolean canMove = false;
+        int[][] offsets = {
+                { 1, 0 },
+                { 0, 1 },
+                { -1, 0 },
+                { 0, -1 },
+                { 1, 1 },
+                { -1, 1 },
+                { -1, -1 },
+                { 1, -1 }
+        };
+        if (!this.hasMoved()) {
+
+            if (currRankIndex == nextRankIndex && Math.abs(currFileIndex - nextFileIndex) == 2) {
+                Piece rookDest = null;
+                for (Piece piece : allyPieces) {
+                    if(piece.getClass().getSimpleName().equals("Rook")){
+                        int allyRookFile = Board.unmapFile(piece.getFile());
+                        int allyRookRank = Board.unmapRank(piece.getRank());
+                        if ((allyRookFile != nextFileIndex-1 || allyRookFile != nextFileIndex+2) && allyRookRank != nextRankIndex) {
+                            continue;
+                        } else {
+                            rookDest = piece;
+                        }
+                    }
+                }
+                if (rookDest == null)
+                    return false;
+                if (rookDest.hasMoved())
+                    return false;
+                // check in between
+                int offsetX = 0;
+                if (currFileIndex < nextFileIndex) {
+                    offsetX = 1;
+                } else {
+                    offsetX = -1;
+                }
+                for (int i = currFileIndex + offsetX; i != nextFileIndex; i += offsetX) {
+                    if (board.board[i][currRankIndex].getPiece() != null) {
+                        return false;
+                    }
+                }
+                board.movePiece(rookDest.getFile() + rookDest.getRank() + " " + Board.mapPosition(currFileIndex+offsetX, currRankIndex), false);
+                return true;
+            }
+        }
+        for (int[] move : offsets) {
+            int nf = currFileIndex + move[0];
+            int nr = currRankIndex + move[1];
+
+            if (nf == nextFileIndex && nr == nextRankIndex && board.board[nf][nr].getPiece() == null) {
+                canMove = true;
+            }
+        }
+        if (!canMove) {
+            return false;
+        }
+        if (isChecked(board, newFile, newRank))
+            canMove = false;
+
+        return canMove;
     }
-//        int currFileIndex = currentSquare.getCol();
-//        int currRankIndex = currentSquare.getRow();
-//        int nextFileIndex = nextSquare.getCol();
-//        int nextRankIndex = nextSquare.getRow();
-//
-//        PieceFactory p = board.getPieceFactory();
-//        ArrayList<Piece> allyPieces = p.getPieces((this.isWhite()) ? "White" : "Black");
-//
-//        boolean canMove = false;
-//        int[][] offsets = {
-//                { 1, 0 },
-//                { 0, 1 },
-//                { -1, 0 },
-//                { 0, -1 },
-//                { 1, 1 },
-//                { -1, 1 },
-//                { -1, -1 },
-//                { 1, -1 }
-//        };
-//        if (!this.hasMoved()) {
-//
-//            if (currRankIndex == nextRankIndex && Math.abs(currFileIndex - nextFileIndex) == 2) {
-//                Piece rookDest = null;
-//                for (Piece piece : allyPieces) {
-//                    if(piece.getClass().getSimpleName().equals("Rook")){
-//                        int allyRookFile = Board.unmapFile(piece.getFile());
-//                        int allyRookRank = Board.unmapRank(piece.getRank());
-//                        if ((allyRookFile != nextFileIndex-1 || allyRookFile != nextFileIndex+2) && allyRookRank != nextRankIndex) {
-//                            continue;
-//                        } else {
-//                            rookDest = piece;
-//                        }
-//                    }
-//                }
-//                if (rookDest == null)
-//                    return false;
-//                if (rookDest.hasMoved())
-//                    return false;
-//                // check in between
-//                int offsetX = 0;
-//                if (currFileIndex < nextFileIndex) {
-//                    offsetX = 1;
-//                } else {
-//                    offsetX = -1;
-//                }
-//                for (int i = currFileIndex + offsetX; i != nextFileIndex; i += offsetX) {
-//                    if (board.board[i][currRankIndex].getPiece() != null) {
-//                        return false;
-//                    }
-//                }
-//                board.movePiece(rookDest.getFile() + rookDest.getRank() + " " + Board.mapPosition(currFileIndex+offsetX, currRankIndex), false);
-//                return true;
-//            }
-//        }
-//        for (int[] move : offsets) {
-//            int nf = currFileIndex + move[0];
-//            int nr = currRankIndex + move[1];
-//
-//            if (nf == nextFileIndex && nr == nextRankIndex && board.board[nf][nr].getPiece() == null) {
-//                canMove = true;
-//            }
-//        }
-//        if (!canMove) {
-//            return false;
-//        }
-//        if (isChecked(board, newFile, newRank))
-//            canMove = false;
-//
-//        return canMove;
-//    }
 //
 //
 //    /** check if the king is under checkMate

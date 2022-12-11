@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,6 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.chessapp.GameSave;
 import com.example.chessapp.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,15 +73,44 @@ class GamesAdapter extends BaseAdapter {
 }
 public class HomeScreenView extends AppCompatActivity {
     private ArrayList<GameSave> gameSaves = new ArrayList<>();
+    private boolean fileExists(Context _context, String _filename) {
+        File temp = _context.getFileStreamPath(_filename);
+        if(temp == null || !temp.exists()) {
+            return false;
+        }
+        return true;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
+        try {
+            FileInputStream fis = openFileInput("gameSaves.dat");
+            ObjectInputStream in = new ObjectInputStream(fis);
+            gameSaves = new ArrayList<GameSave>();
+            for(GameSave gameSave : (ArrayList<GameSave>) in.readObject()) {
+                gameSaves.add(gameSave);
+            }
 
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("NO Saves");
+        }
         Bundle bundle = getIntent().getExtras();
         GameSave game = (GameSave) bundle.getSerializable("GAME_SAVE");
         if(game != null) {
             gameSaves.add(game);
+            try {
+                FileOutputStream fos = null;
+                fos = this.openFileOutput("gameSaves.dat", Context.MODE_PRIVATE);
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                oos.writeObject(gameSaves);
+                oos.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
         final GamesAdapter adapter = new GamesAdapter(this.getBaseContext(), gameSaves);
         ListView listView = findViewById(R.id.games_list);
@@ -88,6 +125,15 @@ public class HomeScreenView extends AppCompatActivity {
             intent.putExtras(previewBundle);
             this.startActivity(intent);
         });
+
+        Button newGameButton = findViewById(R.id.start_game_button);
+
+        newGameButton.setOnClickListener((v) -> {
+            Intent intent = new Intent(this.getBaseContext(), ChessGame.class);
+            this.startActivity(intent);
+        });
+
+
 
 
     }

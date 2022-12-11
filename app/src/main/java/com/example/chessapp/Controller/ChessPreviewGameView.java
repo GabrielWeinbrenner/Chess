@@ -1,6 +1,8 @@
 package com.example.chessapp.Controller;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,7 +33,15 @@ public class ChessPreviewGameView extends AppCompatActivity implements ChessGame
         ImageButton previousMoveButton = findViewById(R.id.last_move);
         ImageButton nextMoveButton = findViewById(R.id.next_move);
         previousMoveButton.setOnClickListener((v) -> {
-            this.board.previousMove();
+            try {
+                this.board.previousMove();
+            } catch (Exception e) {
+                CharSequence text = e.toString();
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(this.getBaseContext(), text, duration);
+                toast.show();
+                e.printStackTrace();
+            }
             cv.setBoard(this.board);
             cv.invalidate();
         });
@@ -39,13 +49,22 @@ public class ChessPreviewGameView extends AppCompatActivity implements ChessGame
             try {
                 this.board.nextMove();
             } catch (Exception e) {
-                CharSequence text = "No more next move";
+                CharSequence text = e.toString();
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(this.getBaseContext(), text, duration);
                 toast.show();
             }
             cv.setBoard(this.board);
             cv.invalidate();
+        });
+        Button endGameButton = findViewById(R.id.end_game_button);
+
+        endGameButton.setOnClickListener((v) -> {
+            Bundle emptyBundle = new Bundle();
+
+            Intent intent = new Intent(this.getBaseContext(), HomeScreenView.class);
+            intent.putExtras(emptyBundle);
+            this.startActivity(intent);
         });
     }
     public void changeHelperText(){

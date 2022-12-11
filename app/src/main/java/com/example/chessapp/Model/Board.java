@@ -131,6 +131,16 @@ public class Board implements Serializable {
         listener.onMovePiece();
 
     }
+    public void movePiece(Square oldSquare, Square newSquare, Piece capturedPiece)  {
+        Piece currPiece = newSquare.getPiece();
+        oldSquare.setPiece(currPiece);
+        newSquare.setPiece(capturedPiece);
+        if(capturedPiece != null) {
+            pieceFactory.addPiece(capturedPiece);
+        }
+        this.whiteMove = !(this.whiteMove);
+        listener.onMovePiece();
+    }
     public void movePiece(@NonNull Move move){
         Square initialSquare = move.getPrevSquare();
         Square nextSquare = move.getNextSquare();
@@ -214,21 +224,22 @@ public class Board implements Serializable {
         this.moves = moves;
     }
 
-    public void previousMove() {
-        currMoveIndex--;
+    public void previousMove() throws Exception {
+        if(currMoveIndex < 0){
+            throw new Exception("Beginning of moves");
+        }
         Move nextMove = this.moves.get(currMoveIndex);
         Square currentSquare = getSquare(nextMove.getPrevSquare().toString());
         Square nextSquare = getSquare(nextMove.getNextSquare().toString());
-
-        movePiece(nextSquare, currentSquare, true);
+        movePiece(currentSquare, nextSquare, nextMove.getCapturedPiece());
+        currMoveIndex--;
     }
 
     public void nextMove() throws Exception {
-
-        currMoveIndex++;
-        if(currMoveIndex == this.moves.size()){
+        if(currMoveIndex >= this.moves.size()-1){
             throw new Exception("End of moves");
         }
+        currMoveIndex++;
         Move nextMove = this.moves.get(currMoveIndex);
         Square currentSquare = getSquare(nextMove.getPrevSquare().toString());
         Square nextSquare = getSquare(nextMove.getNextSquare().toString());
