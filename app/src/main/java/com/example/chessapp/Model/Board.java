@@ -19,7 +19,7 @@ public class Board implements Serializable {
     private ArrayList<Move> moves = new ArrayList<>();
     private int currMoveIndex = -1;
     private ChessGameListener listener;
-
+    private boolean canUndo = true;
     public Board(ChessGameListener listener) {
         this.listener = listener;
         INITIAL_POSITIONS = new HashMap<>();
@@ -128,6 +128,7 @@ public class Board implements Serializable {
         if(!isPreview) {
             moves.add(new Move(oldSquare, newSquare, capturedPiece));
         }
+        canUndo = true;
         listener.onMovePiece();
 
     }
@@ -159,10 +160,13 @@ public class Board implements Serializable {
 
     }
     public void undoMove() {
-        Move lastMove = moves.get(moves.size() -1);
-        movePiece(lastMove);
-        moves.remove(moves.size()-1);
-        listener.onMovePiece();
+        if (canUndo) {
+            Move lastMove = moves.get(moves.size() -1);
+            movePiece(lastMove);
+            moves.remove(moves.size()-1);
+            listener.onMovePiece();
+            canUndo = false;
+        }
     }
     public boolean isValidMove(Square currSquare, Square nextSquare){
         if(currSquare == null || nextSquare == null)

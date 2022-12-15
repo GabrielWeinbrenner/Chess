@@ -49,17 +49,26 @@ public class ChessGame extends AppCompatActivity implements ChessGameListener {
         listView.addView(cv);
         ImageButton undoButton = (ImageButton) findViewById(R.id.undo_button);
         ImageButton aiButton = (ImageButton) findViewById(R.id.ai_button);
-        Button endButton = (Button) findViewById(R.id.end_game_button);
+        Button resignButton = (Button) findViewById(R.id.resign_game_button);
+        Button drawButton = (Button) findViewById(R.id.draw_game_button);
         UndoClickListener undoClickListener = new UndoClickListener(this.board);
 
         undoButton.setOnClickListener(undoClickListener);
         AIClickListener aiClickListener = new AIClickListener(this.board);
         aiButton.setOnClickListener(aiClickListener);
-        endButton.setOnClickListener((View v) -> {finalizeGame();});
+        resignButton.setOnClickListener((View v) -> {
+            finalizeGame("Resign", board.getPlayer());
+        });
+
+        drawButton.setOnClickListener((View v) -> {
+            finalizeGame("Draw", board.getPlayer());
+        });
     }
-    private void finalizeGame() {
+    private void finalizeGame(String status, String player) {
         Bundle bundle = new Bundle();
         bundle.putSerializable("MOVES", this.board.getMoves());
+        bundle.putSerializable("STATUS", status);
+        bundle.putSerializable("PLAYER", player);
         Intent intent = new Intent(this, GameFinalFormView.class);
         intent.putExtras(bundle);
         startActivity(intent);

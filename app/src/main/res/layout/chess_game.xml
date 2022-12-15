@@ -30,7 +30,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:orientation="horizontal">
 
         <ImageButton
@@ -45,13 +45,28 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/end_game_button"
-            android:layout_width="81dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="End Game"
-            app:backgroundTint="#DD4646" />
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/draw_game_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Draw"
+                app:backgroundTint="#FF9800" />
+
+            <Button
+                android:id="@+id/resign_game_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Resign"
+                app:backgroundTint="#756F6E" />
+        </LinearLayout>
 
         <Space
             android:layout_width="13dp"
@@ -64,10 +79,9 @@
             android:layout_width="81dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ai_image"
-            tools:src="@drawable/ai_image"
             android:scaleType="fitCenter"
-            />
+            android:src="@drawable/ai_image"
+            tools:src="@drawable/ai_image" />
 
     </LinearLayout>
 

@@ -57,7 +57,7 @@ public class ChessPreviewGameView extends AppCompatActivity implements ChessGame
             cv.setBoard(this.board);
             cv.invalidate();
         });
-        Button endGameButton = findViewById(R.id.end_game_button);
+        Button endGameButton = findViewById(R.id.draw_game_button);
 
         endGameButton.setOnClickListener((v) -> {
             Bundle emptyBundle = new Bundle();

@@ -99,8 +99,12 @@ public class GameFinalFormView extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         ArrayList<Move> moves = (ArrayList<Move>) bundle.getSerializable("MOVES");
+        String status = (String) bundle.getSerializable("STATUS");
+        String player = (String) bundle.getSerializable("PLAYER");
         ListView listView = findViewById(R.id.moves_list);
         EditText gameNameInput = findViewById(R.id.game_name_input);
+        TextView gameStatusText = findViewById(R.id.game_status_text);
+        gameStatusText.setText(player + " " + status);
         final MovesAdapter adapter = new MovesAdapter(this.getBaseContext(), moves);
         listView.setAdapter(adapter);
 
